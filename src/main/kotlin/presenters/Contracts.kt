@@ -10,14 +10,20 @@ interface Contracts {
 
         fun deleteList()
 
-        fun selectNewList(name: String)
+        fun selectNewList(listPath: String)
 
         fun createNewTask(task: Task)
 
         fun deleteTask(task: Task)
 
-        fun changeStatus(task: Task, newStatus: Status)
+        fun changeTaskStatus(task: Task, newStatus: Status)
 
+        fun showAllTasks()
+
+        fun showCompletedTasks()
+    }
+
+    interface View {
 
     }
 

@@ -4,8 +4,8 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class Task (
-    var id: Int,
+    var id: Int = 99,
     var name: String,
-    var description: String,
-    var status: Status = Status.TODO
+    var description: String = "",
+    var status: Int = 0
 )
