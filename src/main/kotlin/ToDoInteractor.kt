@@ -7,16 +7,16 @@ class ToDoInteractor(private val filesInteractor: FilesInteractor)
     : Contracts.ListInteractor, Contracts.TaskInteractor {
 
     private var currentList: ToDoList? = null
-    //private var listName: String? = null
 
     val availableLists: MutableList<String>
         get() = filesInteractor.findFiles()
 
     override fun selectCurrentList(newListName: String): Result<ToDoList> {
         val result = filesInteractor.readFile(newListName.toListFileName())
-        if (result.status == Status.SUCCESS) {
+
+        if (result.status == Status.SUCCESS)
             currentList = result.data
-        }
+
         return result
     }
 
@@ -71,10 +71,12 @@ class ToDoInteractor(private val filesInteractor: FilesInteractor)
 
         val result: Result<Unit>
         val action: Boolean
+
         when(taskAction) {
             TaskAction.DELETE -> action = tempList?.removeTask(taskId) == true
             TaskAction.SET_AS_DONE -> action = tempList?.setTaskAsDone(taskId) == true
         }
+
         if (action) {
             result = updateListFile(tempList)
             if (result.status == Status.SUCCESS)
