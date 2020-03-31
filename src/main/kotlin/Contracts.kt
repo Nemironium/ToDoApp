@@ -1,26 +1,26 @@
 import entities.Task
 import entities.ToDoList
-import utils.Responce
+import entities.Result
 
 interface Contracts {
     interface FilesInteractor {
         fun findFiles() : MutableList<String>
 
-        fun createNewFile(fileName: String): Responce<Unit>
+        fun createNewFile(fileName: String, newToDoList: ToDoList): Result<Unit>
 
-        fun deleteFile(fileName: String): Responce<Unit>
+        fun deleteFile(fileName: String): Result<Unit>
 
-        fun readFile(fileName: String): Responce<ToDoList>
+        fun readFile(fileName: String): Result<ToDoList>
 
-        fun writeListToFile(fileName: String, toDoList: ToDoList): Responce<Unit>
+        fun writeListToFile(fileName: String, toDoList: ToDoList): Result<Unit>
     }
 
     interface ListInteractor {
-        fun selectCurrentList(newListName: String): Boolean
+        fun selectCurrentList(newListName: String): Result<ToDoList>
 
-        fun createNewList(newListName: String)
+        fun createNewList(newListName: String): Result<Unit>
 
-        fun deleteList(listName: String)
+        fun deleteList(listName: String): Result<Unit>
 
         fun showTasks(): MutableList<Task>?
 
@@ -28,10 +28,10 @@ interface Contracts {
     }
 
     interface TaskInteractor {
-        fun addTask(task: Task)
+        fun addTask(task: Task): Result<Unit>
 
-        fun setTaskAsDone(taskId: Int): Boolean
+        fun setTaskAsDone(taskId: Int): Result<Unit>
 
-        fun deleteTask(taskId: Int): Boolean
+        fun deleteTask(taskId: Int): Result<Unit>
     }
 }

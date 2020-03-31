@@ -1,6 +1,6 @@
 package presenters
 
-import entities.Status
+import entities.TaskStatus
 import entities.Task
 
 interface Contracts {
@@ -16,7 +16,7 @@ interface Contracts {
 
         fun deleteTask(task: Task)
 
-        fun changeTaskStatus(task: Task, newStatus: Status)
+        fun changeTaskStatus(task: Task, newTaskStatus: TaskStatus)
 
         fun showAllTasks()
 

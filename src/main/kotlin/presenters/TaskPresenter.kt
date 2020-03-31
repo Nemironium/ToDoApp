@@ -1,6 +1,6 @@
 package presenters
 
-import entities.Status
+import entities.TaskStatus
 import entities.Task
 
 class TaskPresenter(private val listPath: String) : Contracts.TaskPresenterContract {
@@ -24,7 +24,7 @@ class TaskPresenter(private val listPath: String) : Contracts.TaskPresenterContr
         TODO("Not yet implemented")
     }
 
-    override fun changeTaskStatus(task: Task, newStatus: Status) {
+    override fun changeTaskStatus(task: Task, newTaskStatus: TaskStatus) {
         TODO("Not yet implemented")
     }
 

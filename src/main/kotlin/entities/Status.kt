@@ -1,6 +1,6 @@
 package entities
 
-enum class Status(val code: Int) {
-    TODO(0),
-    DONE(1)
+enum class Status {
+    SUCCESS,
+    ERROR
 }
