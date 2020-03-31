@@ -1,21 +1,22 @@
 import entities.Task
 import entities.ToDoList
+import utils.Responce
 
 interface Contracts {
     interface FilesInteractor {
         fun findFiles() : MutableList<String>
 
-        fun createNewFile(fileName: String)
+        fun createNewFile(fileName: String): Responce<Unit>
 
-        fun deleteFile(fileName: String)
+        fun deleteFile(fileName: String): Responce<Unit>
 
-        fun readFile(fileName: String): ToDoList?
+        fun readFile(fileName: String): Responce<ToDoList>
 
-        fun writeListToFile(fileName: String, toDoList: ToDoList)
+        fun writeListToFile(fileName: String, toDoList: ToDoList): Responce<Unit>
     }
 
     interface ListInteractor {
-        fun selectCurrentList(newListName: String)
+        fun selectCurrentList(newListName: String): Boolean
 
         fun createNewList(newListName: String)
 

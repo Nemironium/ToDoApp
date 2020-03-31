@@ -1,13 +1,16 @@
 import entities.ToDoList
+import kotlinx.serialization.SerializationException
 import kotlinx.serialization.UnstableDefault
 import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.JsonException
+import utils.Responce
 import java.io.File
+import java.io.IOException
 import java.nio.file.FileSystems
 
 @UnstableDefault
 class FilesInteractor : Contracts.FilesInteractor {
 
-    /* TODO(нужно сделать suspend)*/
     override fun findFiles() : MutableList<String> {
         val todoFiles = mutableListOf<String>()
 
@@ -22,45 +25,85 @@ class FilesInteractor : Contracts.FilesInteractor {
         return todoFiles
     }
 
-    override fun createNewFile(fileName: String) {
+    override fun createNewFile(fileName: String): Responce<Unit> {
         val outFile = File(fileName)
         if (outFile.exists() && outFile.isFile)
-            throw FileAlreadyExistsException(outFile, reason = "File $fileName already exists")
+            return Responce.error("File $fileName already exists")
 
-        val newToDoList = ToDoList(fileName, mutableListOf())
-        val jsonData= Json.stringify(ToDoList.serializer(), newToDoList)
-
-        outFile.createNewFile()
-        outFile.writeText(jsonData)
+        return writeFile(outFile, ToDoList(fileName, mutableListOf()))
     }
 
-    override fun deleteFile(fileName: String) {
+    override fun deleteFile(fileName: String): Responce<Unit> {
         val file = File(fileName)
         if (!file.exists())
-            throw NoSuchFileException(file, reason = "File $fileName does not exist")
+            return Responce.error("File $fileName does not exist")
 
-        file.delete()
+        try {
+            file.delete()
+        } catch (e: SecurityException) {
+            return Responce.error("Security error. ${e.message}")
+        } catch (e: IOException) {
+            return Responce.error("IO error. ${e.message}")
+        }
+
+        return Responce.success(Unit)
     }
 
-    override fun readFile(fileName: String): ToDoList? {
+    override fun readFile(fileName: String): Responce<ToDoList> {
         val inputFile = File(fileName)
 
         if (!inputFile.exists())
-            throw NoSuchFileException(inputFile, reason = "File $fileName does not exist")
+            return Responce.error("File $fileName does not exist")
 
-        val jsonData = inputFile.readText()
+        val jsonData: String
+        try {
+            jsonData = inputFile.readText()
+        } catch (e: SecurityException) {
+            return Responce.error("Security error. ${e.message}")
+        } catch (e: IOException) {
+            return Responce.error("IO error. ${e.message}")
+        }
 
-        return Json.parse(ToDoList.serializer(), jsonData)
+        val parsedJson: ToDoList
+        try {
+            parsedJson = Json.parse(ToDoList.serializer(), jsonData)
+        }  catch (e: JsonException) {
+            return Responce.error("Encoding error. ${e.message}")
+        } catch (e: SerializationException) {
+            return Responce.error("Serialization error. ${e.message}")
+        }
+
+        return Responce.success(parsedJson)
     }
 
     /* TODO (не нужно перезаписывать весь файл, а лишь дописывать новые)*/
-    override fun writeListToFile(fileName: String, toDoList: ToDoList) {
+    override fun writeListToFile(fileName: String, toDoList: ToDoList): Responce<Unit> {
         val outFile = File(fileName)
 
         if (!outFile.exists())
-            throw NoSuchFileException(outFile, reason = "File $fileName does not exist")
+            return Responce.error("File $fileName does not exist")
 
-        val jsonData= Json.stringify(ToDoList.serializer(), toDoList)
-        outFile.writeText(jsonData)
+        return writeFile(outFile, toDoList)
+    }
+
+    private fun writeFile(file: File, toDoList: ToDoList): Responce<Unit> {
+        val jsonData: String
+        try {
+            jsonData = Json.stringify(ToDoList.serializer(), toDoList)
+        } catch (e: JsonException) {
+            return Responce.error("Encoding error. ${e.message}")
+        } catch (e: SerializationException) {
+            return Responce.error("Serialization error. ${e.message}")
+        }
+
+        try {
+            file.writeText(jsonData)
+        } catch (e: SecurityException) {
+            return Responce.error("Security error. ${e.message}")
+        } catch (e: IOException) {
+            return Responce.error("IO error. ${e.message}")
+        }
+
+        return Responce.success(Unit)
     }
 }
