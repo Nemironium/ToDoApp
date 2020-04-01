@@ -1,6 +1,5 @@
 package interactors
 
-import Contracts
 import entities.ToDoList
 import kotlinx.serialization.SerializationException
 import kotlinx.serialization.UnstableDefault

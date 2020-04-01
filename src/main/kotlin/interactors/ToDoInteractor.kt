@@ -1,6 +1,5 @@
 package interactors
 
-import Contracts
 import entities.Task
 import entities.TaskAction
 import entities.ToDoList
@@ -19,10 +18,13 @@ class ToDoInteractor(private val filesInteractor: FilesInteractor)
     val listName: String?
         get() = currentList?.title
 
+    val isTasksAvailable: Boolean?
+        get() = currentList?.tasks?.isNotEmpty()
+
     override fun selectCurrentList(newListName: String): Result<ToDoList> {
         val result = filesInteractor.readFile(newListName.toListFileName())
 
-        if (result.status == Status.SUCCESS)
+        if (result.isSuccessful)
             currentList = result.data
 
         return result
@@ -32,7 +34,7 @@ class ToDoInteractor(private val filesInteractor: FilesInteractor)
         val newList = ToDoList(newListName, mutableListOf())
         val result = filesInteractor.createNewFile(newListName.toListFileName(), newList)
 
-        if (result.status == Status.SUCCESS)
+        if (result.isSuccessful)
             currentList = newList
 
         return result
@@ -41,7 +43,7 @@ class ToDoInteractor(private val filesInteractor: FilesInteractor)
     override fun deleteList(listName: String): Result<Unit> {
         val result = filesInteractor.deleteFile(listName.toListFileName())
 
-        if (result.status == Status.SUCCESS && listName == currentList?.title)
+        if (result.isSuccessful && listName == currentList?.title)
             currentList = null
 
         return result
@@ -56,7 +58,7 @@ class ToDoInteractor(private val filesInteractor: FilesInteractor)
         tempList?.addTask(task)
 
         val result = updateListFile(tempList)
-        if (result.status == Status.SUCCESS)
+        if (result.isSuccessful)
             currentList = tempList
 
         return result
@@ -87,7 +89,7 @@ class ToDoInteractor(private val filesInteractor: FilesInteractor)
 
         if (action) {
             result = updateListFile(tempList)
-            if (result.status == Status.SUCCESS)
+            if (result.isSuccessful)
                 currentList = tempList
         } else {
             result = Result.error("Task with id $taskId does not exist")

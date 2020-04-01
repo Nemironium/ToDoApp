@@ -16,7 +16,6 @@ import interactors.ToDoInteractor
 import kotlinx.serialization.UnstableDefault
 import org.junit.Test
 import utils.Result
-import utils.Status
 import utils.toListFileName
 
 @UnstableDefault
@@ -33,7 +32,7 @@ class ListsTest {
         listInteractor = ToDoInteractor(filesInteractor)
 
         val result = listInteractor.createNewList("Home")
-        assertThat(result.status).isEqualTo(Status.ERROR)
+        assertThat(result.isFailed).isTrue()
         assertThat(listInteractor.listName).isNull()
     }
 
@@ -46,7 +45,7 @@ class ListsTest {
         listInteractor = ToDoInteractor(filesInteractor)
 
         val result = listInteractor.createNewList(mockedEmptyHome2List.title)
-        assertThat(result.status).isEqualTo(Status.SUCCESS)
+        assertThat(result.isSuccessful).isTrue()
         assertThat(listInteractor.listName).isEqualTo(mockedEmptyHome2List.title)
     }
 
@@ -59,7 +58,7 @@ class ListsTest {
         listInteractor = ToDoInteractor(filesInteractor)
 
         val selectNotExistingList = listInteractor.selectCurrentList("Home2")
-        assertThat(selectNotExistingList.status).isEqualTo(Status.ERROR)
+        assertThat(selectNotExistingList.isFailed).isTrue()
 
         // should throw exception
         listInteractor.selectCurrentList("Home")
@@ -76,15 +75,15 @@ class ListsTest {
         listInteractor = ToDoInteractor(filesInteractor)
 
         var result = listInteractor.selectCurrentList(mockedHomeList.title)
-        assertThat(result.status).isEqualTo(Status.SUCCESS)
+        assertThat(result.isSuccessful).isTrue()
         assertThat(listInteractor.showTasks()).isEqualTo(homeTasks)
 
         result = listInteractor.selectCurrentList(mockedWorkList.title)
-        assertThat(result.status).isEqualTo(Status.SUCCESS)
+        assertThat(result.isSuccessful).isTrue()
         assertThat(listInteractor.showTasks()).isEqualTo(workTasks)
 
         result = listInteractor.selectCurrentList(mockedStudyList.title)
-        assertThat(result.status).isEqualTo(Status.SUCCESS)
+        assertThat(result.isSuccessful).isTrue()
         assertThat(listInteractor.showTasks()).isEqualTo(studyTasks)
 
         // should throw exception
@@ -99,8 +98,8 @@ class ListsTest {
         }
         listInteractor = ToDoInteractor(filesInteractor)
 
-        val deleteNotExistingList = listInteractor.deleteList("Home2")
-        assertThat(deleteNotExistingList.status).isEqualTo(Status.ERROR)
+        val result = listInteractor.deleteList("Home2")
+        assertThat(result.isFailed).isTrue()
 
         // should throw exception
         listInteractor.deleteList("Home")
@@ -115,11 +114,11 @@ class ListsTest {
         listInteractor = ToDoInteractor(filesInteractor)
 
         var result = listInteractor.deleteList(mockedHomeList.title)
-        assertThat(result.status).isEqualTo(Status.SUCCESS)
+        assertThat(result.isSuccessful).isTrue()
         assertThat(listInteractor.listName).isNull()
 
         result = listInteractor.deleteList(mockedStudyList.title)
-        assertThat(result.status).isEqualTo(Status.SUCCESS)
+        assertThat(result.isSuccessful).isTrue()
         assertThat(listInteractor.listName).isNull()
 
         // should throw exception

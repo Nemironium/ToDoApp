@@ -15,7 +15,6 @@ import kotlinx.serialization.UnstableDefault
 import org.junit.Before
 import org.junit.Test
 import utils.Result
-import utils.Status
 
 @UnstableDefault
 class TasksTests {
@@ -93,7 +92,7 @@ class TasksTests {
 
         assertThat(listInteractor.showNotDoneTasks()?.size).isEqualTo(3)
         val result = listInteractor.setTaskAsDone(mockedHomeList.tasks[0].id)
-        assertThat(result.status).isEqualTo(Status.SUCCESS)
+        assertThat(result.isSuccessful).isTrue()
         assertThat(listInteractor.showNotDoneTasks()?.size).isEqualTo(2)
     }
 
@@ -108,7 +107,7 @@ class TasksTests {
         assertThat(listInteractor.showNotDoneTasks()?.size).isEqualTo(3)
         println(listInteractor.showTasks())
         val result = listInteractor.setTaskAsDone(taskId = 4)
-        assertThat(result.status).isEqualTo(Status.ERROR)
+        assertThat(result.isFailed).isTrue()
         assertThat(listInteractor.showNotDoneTasks()?.size).isEqualTo(3)
     }
 
@@ -120,7 +119,7 @@ class TasksTests {
         val deletedTaskId = mockedHomeList.tasks[0].id
         assertThat(listInteractor.showTasks()?.size).isEqualTo(4)
         val result = listInteractor.deleteTask(deletedTaskId)
-        assertThat(result.status).isEqualTo(Status.SUCCESS)
+        assertThat(result.isSuccessful).isTrue()
         assertThat(listInteractor.showTasks()?.size).isEqualTo(3)
         assertThat(listInteractor.showTasks()?.find { it.id == deletedTaskId }).isNull()
     }
@@ -132,7 +131,7 @@ class TasksTests {
 
         assertThat(listInteractor.showTasks()?.size).isEqualTo(4)
         val result = listInteractor.deleteTask(taskId = 5)
-        assertThat(result.status).isEqualTo(Status.ERROR)
+        assertThat(result.isFailed).isTrue()
         assertThat(listInteractor.showTasks()?.size).isEqualTo(4)
     }
 }
