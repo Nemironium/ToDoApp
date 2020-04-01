@@ -1,7 +1,9 @@
 package interactors
 
 import Contracts
-import entities.*
+import entities.Task
+import entities.TaskAction
+import entities.ToDoList
 import kotlinx.serialization.UnstableDefault
 import utils.*
 
@@ -51,9 +53,9 @@ class ToDoInteractor(private val filesInteractor: FilesInteractor)
 
     override fun addTask(task: Task): Result<Unit> {
         val tempList = currentList?.copy()
-        val result = updateListFile(tempList)
         tempList?.addTask(task)
 
+        val result = updateListFile(tempList)
         if (result.status == Status.SUCCESS)
             currentList = tempList
 
