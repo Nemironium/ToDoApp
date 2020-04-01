@@ -18,6 +18,7 @@ dependencies {
     def junit_version = "3.2.0"
     def mockito_kotlin_version = "2.2.0"
     def truth_version = "1.0.1"
+    def clikt_version = "2.6.0"
 
     // core
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
@@ -31,6 +32,10 @@ dependencies {
     // colored terminal
     implementation "com.github.ajalt:mordant:$term_colors_version"
 
+    // for CLI prompts
+    implementation "com.github.ajalt:clikt:$clikt_version"
+
+    // testing. mocking, asserts
     testImplementation "junit:junit:$junit_version"
     testImplementation "com.nhaarman.mockitokotlin2:mockito-kotlin:$mockito_kotlin_version"
     testImplementation "org.koin:koin-test:$koin_version"
