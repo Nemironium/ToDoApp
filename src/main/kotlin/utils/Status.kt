@@ -1,4 +1,4 @@
-package entities
+package utils
 
 enum class Status {
     SUCCESS,

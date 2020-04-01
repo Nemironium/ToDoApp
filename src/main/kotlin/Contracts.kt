@@ -1,6 +1,6 @@
 import entities.Task
 import entities.ToDoList
-import entities.Result
+import utils.Result
 
 interface Contracts {
     interface FilesInteractor {
@@ -33,5 +33,11 @@ interface Contracts {
         fun setTaskAsDone(taskId: Int): Result<Unit>
 
         fun deleteTask(taskId: Int): Result<Unit>
+    }
+
+    interface ConsoleMenu {
+        fun listMenu(): String
+
+        fun taskMenu()
     }
 }

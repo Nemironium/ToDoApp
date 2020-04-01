@@ -1,13 +1,19 @@
-import com.github.ajalt.mordant.TermColors
+import di.applicationModule
+import entities.Task
+import interactors.FilesInteractor
+import interactors.ToDoInteractor
 import kotlinx.serialization.UnstableDefault
-
+import org.koin.core.context.startKoin
 
 
 @UnstableDefault
 fun main()
 {
-
-    /*val filesInteractor = FilesInteractor()
+    startKoin {
+        printLogger()
+        modules(applicationModule)
+    }
+    /*val filesInteractor = interactors.FilesInteractor()
     val files = filesInteractor.findFiles()
     *//*with(TermColors()) {
         files.forEach { println(red(it.toString())) }
@@ -19,15 +25,21 @@ fun main()
     }*//*
 
     filesInteractor.createNewFile("work")*/
-    var listInteractor: ToDoInteractor? = null
-    try {
-        listInteractor = ToDoInteractor("work", FilesInteractor())
-    } catch (e: Exception) {
-        with(TermColors()) {
-            println(red(e.message!!))
-        }
-    }
+    val listInteractor: ToDoInteractor
+
     println(FilesInteractor().findFiles())
+    /*listInteractor.addTask(Task(name = "Meeting with Fred", description = "Do not forget suitcase!!!"))
+    listInteractor.addTask(Task(name = "Meeting with Fred", description = "Do not forget suitcase!!!"))
+    listInteractor.addTask(Task(name = "Meeting with Fred", description = "Do not forget suitcase!!!"))
+    listInteractor.addTask(Task(name = "Meeting with Fred", description = "Do not forget suitcase!!!"))
+    listInteractor.addTask(Task(name = "Meeting with Fred", description = "Do not forget suitcase!!!"))
+    listInteractor.addTask(Task(name = "Meeting with Fred", description = "Do not forget suitcase!!!"))
+    listInteractor.addTask(Task(name = "Meeting with Fred", description = "Do not forget suitcase!!!"))
+    listInteractor.addTask(Task(name = "Meeting with Fred", description = "Do not forget suitcase!!!"))
+    listInteractor.addTask(Task(name = "Meeting with Fred", description = "Do not forget suitcase!!!"))
+    listInteractor.addTask(Task(name = "Meeting with Fred", description = "Do not forget suitcase!!!"))
+    listInteractor.addTask(Task(name = "Meeting with Fred", description = "Do not forget suitcase!!!"))
+    listInteractor.addTask(Task(name = "Meeting with Fred", description = "Do not forget suitcase!!!"))*/
     /*println(listInteractor?.showTasks())
     //listInteractor?.addTask(Task(name = "Meeting with Fred", description = "Do not forget suitcase!!!"))
     listInteractor?.setTaskAsDone(0)

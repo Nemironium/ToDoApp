@@ -1,9 +1,12 @@
+package interactors
+
+import Contracts
 import entities.ToDoList
 import kotlinx.serialization.SerializationException
 import kotlinx.serialization.UnstableDefault
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonException
-import entities.Result
+import utils.Result
 import java.io.File
 import java.io.IOException
 import java.nio.file.FileSystems

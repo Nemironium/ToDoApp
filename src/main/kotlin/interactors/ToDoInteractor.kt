@@ -1,3 +1,6 @@
+package interactors
+
+import Contracts
 import entities.*
 import kotlinx.serialization.UnstableDefault
 import utils.*
@@ -10,6 +13,9 @@ class ToDoInteractor(private val filesInteractor: FilesInteractor)
 
     val availableLists: MutableList<String>
         get() = filesInteractor.findFiles()
+
+    val listName: String?
+        get() = currentList?.title
 
     override fun selectCurrentList(newListName: String): Result<ToDoList> {
         val result = filesInteractor.readFile(newListName.toListFileName())
