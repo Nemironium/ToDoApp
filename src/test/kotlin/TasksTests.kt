@@ -18,7 +18,7 @@ import utils.Result
 import utils.Status
 
 @UnstableDefault
-class Tasks {
+class TasksTests {
     private lateinit var filesInteractor: FilesInteractor
     private lateinit var listInteractor: ToDoInteractor
 
@@ -99,10 +99,14 @@ class Tasks {
 
     @Test
     fun setDoneNotExistingTask() {
+        /* because of modifying mockedHomeList and mockedWorkList in addTasksToExistingList */
         listInteractor.selectCurrentList(mockedHomeList.title)
-        assertThat(listInteractor.listName).isEqualTo(mockedHomeList.title)
+        listInteractor.selectCurrentList(mockedWorkList.title)
+        listInteractor.selectCurrentList(mockedStudyList.title)
+        assertThat(listInteractor.listName).isEqualTo(mockedStudyList.title)
 
         assertThat(listInteractor.showNotDoneTasks()?.size).isEqualTo(3)
+        println(listInteractor.showTasks())
         val result = listInteractor.setTaskAsDone(taskId = 4)
         assertThat(result.status).isEqualTo(Status.ERROR)
         assertThat(listInteractor.showNotDoneTasks()?.size).isEqualTo(3)
