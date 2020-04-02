@@ -76,15 +76,15 @@ class ListsTest {
 
         var result = listInteractor.selectCurrentList(mockedHomeList.title)
         assertThat(result.isSuccessful).isTrue()
-        assertThat(listInteractor.showTasks()).isEqualTo(homeTasks)
+        assertThat(listInteractor.getTasks()).isEqualTo(homeTasks)
 
         result = listInteractor.selectCurrentList(mockedWorkList.title)
         assertThat(result.isSuccessful).isTrue()
-        assertThat(listInteractor.showTasks()).isEqualTo(workTasks)
+        assertThat(listInteractor.getTasks()).isEqualTo(workTasks)
 
         result = listInteractor.selectCurrentList(mockedStudyList.title)
         assertThat(result.isSuccessful).isTrue()
-        assertThat(listInteractor.showTasks()).isEqualTo(studyTasks)
+        assertThat(listInteractor.getTasks()).isEqualTo(studyTasks)
 
         // should throw exception
         listInteractor.selectCurrentList("Home2")

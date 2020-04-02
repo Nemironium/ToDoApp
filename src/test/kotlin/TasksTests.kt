@@ -38,12 +38,12 @@ class TasksTests {
     fun addTasksToNewList() {
         initNewListInteractor()
         listInteractor.createNewList("Home2")
-        assertThat(listInteractor.showTasks()).isEmpty()
+        assertThat(listInteractor.getTasks()).isEmpty()
 
         val task = Task(name = "Feed puppy", description = "Do not forget meat!!!")
         listInteractor.addTask(task)
-        assertThat(listInteractor.showTasks()?.size).isEqualTo(1)
-        assertThat(listInteractor.showTasks()?.get(0)?.name).isEqualTo(task.name)
+        assertThat(listInteractor.getTasks()?.size).isEqualTo(1)
+        assertThat(listInteractor.getTasks()?.get(0)?.name).isEqualTo(task.name)
     }
 
     private fun initNewListInteractor() {
@@ -63,14 +63,14 @@ class TasksTests {
         val task1 = Task(name = "Feed kitty", description = "Do not forget milk!!!")
 
         listInteractor.addTask(task1)
-        assertThat(listInteractor.showTasks()?.find { it.name == task1.name }).isNotNull()
+        assertThat(listInteractor.getTasks()?.find { it.name == task1.name }).isNotNull()
 
         listInteractor.selectCurrentList(mockedWorkList.title)
         assertThat(listInteractor.listName).isEqualTo(mockedWorkList.title)
         val task2 = Task(name = "Meeting with CEO")
 
         listInteractor.addTask(task2)
-        assertThat(listInteractor.showTasks()?.find { it.name == task2.name }).isNotNull()
+        assertThat(listInteractor.getTasks()?.find { it.name == task2.name }).isNotNull()
     }
 
     @Test
@@ -78,11 +78,11 @@ class TasksTests {
         listInteractor.selectCurrentList(mockedHomeList.title)
         assertThat(listInteractor.listName).isEqualTo(mockedHomeList.title)
 
-        assertThat(listInteractor.showNotDoneTasks()?.size).isEqualTo(3)
+        assertThat(listInteractor.getTodoTasks()?.size).isEqualTo(3)
         val task1 = Task(name = "Feed kitty", description = "Do not forget milk!!!",
             status = TaskStatus.DONE.code)
         listInteractor.addTask(task1)
-        assertThat(listInteractor.showNotDoneTasks()?.size).isEqualTo(3)
+        assertThat(listInteractor.getTodoTasks()?.size).isEqualTo(3)
     }
 
     @Test
@@ -90,10 +90,10 @@ class TasksTests {
         listInteractor.selectCurrentList(mockedHomeList.title)
         assertThat(listInteractor.listName).isEqualTo(mockedHomeList.title)
 
-        assertThat(listInteractor.showNotDoneTasks()?.size).isEqualTo(3)
+        assertThat(listInteractor.getTodoTasks()?.size).isEqualTo(3)
         val result = listInteractor.setTaskAsDone(mockedHomeList.tasks[0].id)
         assertThat(result.isSuccessful).isTrue()
-        assertThat(listInteractor.showNotDoneTasks()?.size).isEqualTo(2)
+        assertThat(listInteractor.getTodoTasks()?.size).isEqualTo(2)
     }
 
     @Test
@@ -104,11 +104,11 @@ class TasksTests {
         listInteractor.selectCurrentList(mockedStudyList.title)
         assertThat(listInteractor.listName).isEqualTo(mockedStudyList.title)
 
-        assertThat(listInteractor.showNotDoneTasks()?.size).isEqualTo(3)
-        println(listInteractor.showTasks())
+        assertThat(listInteractor.getTodoTasks()?.size).isEqualTo(3)
+        println(listInteractor.getTasks())
         val result = listInteractor.setTaskAsDone(taskId = 4)
         assertThat(result.isFailed).isTrue()
-        assertThat(listInteractor.showNotDoneTasks()?.size).isEqualTo(3)
+        assertThat(listInteractor.getTodoTasks()?.size).isEqualTo(3)
     }
 
     @Test
@@ -117,11 +117,11 @@ class TasksTests {
         assertThat(listInteractor.listName).isEqualTo(mockedHomeList.title)
 
         val deletedTaskId = mockedHomeList.tasks[0].id
-        assertThat(listInteractor.showTasks()?.size).isEqualTo(4)
+        assertThat(listInteractor.getTasks()?.size).isEqualTo(4)
         val result = listInteractor.deleteTask(deletedTaskId)
         assertThat(result.isSuccessful).isTrue()
-        assertThat(listInteractor.showTasks()?.size).isEqualTo(3)
-        assertThat(listInteractor.showTasks()?.find { it.id == deletedTaskId }).isNull()
+        assertThat(listInteractor.getTasks()?.size).isEqualTo(3)
+        assertThat(listInteractor.getTasks()?.find { it.id == deletedTaskId }).isNull()
     }
 
     @Test
@@ -129,9 +129,9 @@ class TasksTests {
         listInteractor.selectCurrentList(mockedHomeList.title)
         assertThat(listInteractor.listName).isEqualTo(mockedHomeList.title)
 
-        assertThat(listInteractor.showTasks()?.size).isEqualTo(4)
+        assertThat(listInteractor.getTasks()?.size).isEqualTo(4)
         val result = listInteractor.deleteTask(taskId = 5)
         assertThat(result.isFailed).isTrue()
-        assertThat(listInteractor.showTasks()?.size).isEqualTo(4)
+        assertThat(listInteractor.getTasks()?.size).isEqualTo(4)
     }
 }
