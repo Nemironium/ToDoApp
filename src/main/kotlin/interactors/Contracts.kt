@@ -23,17 +23,19 @@ interface Contracts {
         fun createNewList(newListName: String): Result<Unit>
 
         fun deleteList(listName: String): Result<Unit>
-
-        fun showTasks(): MutableList<Task>?
-
-        fun showNotDoneTasks(): List<Task>?
     }
 
     interface TaskInteractor {
+        fun getTasks(): List<Task>?
+
+        fun getTodoTasks(): List<Task>?
+
         fun addTask(task: Task): Result<Unit>
 
         fun setTaskAsDone(taskId: Int): Result<Unit>
 
         fun deleteTask(taskId: Int): Result<Unit>
+
+        fun searchTaskByTitle(keyword: String): List<Task>
     }
 }

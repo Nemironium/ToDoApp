@@ -21,6 +21,9 @@ class ToDoInteractor(private val filesInteractor: FilesInteractor)
     val isTasksAvailable: Boolean?
         get() = currentList?.tasks?.isNotEmpty()
 
+    val maxTaskId: Int?
+        get() = currentList?.tasks?.maxBy { it.id }?.id
+
     override fun selectCurrentList(newListName: String): Result<ToDoList> {
         val result = filesInteractor.readFile(newListName.toListFileName())
 
@@ -49,9 +52,9 @@ class ToDoInteractor(private val filesInteractor: FilesInteractor)
         return result
     }
 
-    override fun showTasks(): MutableList<Task>? = currentList?.tasks
+    override fun getTasks(): List<Task>? = currentList?.tasks
 
-    override fun showNotDoneTasks(): List<Task>? = currentList?.todoTasks()
+    override fun getTodoTasks(): List<Task>? = currentList?.todoTasks()
 
     override fun addTask(task: Task): Result<Unit> {
         val tempList = currentList?.copy()
@@ -70,6 +73,9 @@ class ToDoInteractor(private val filesInteractor: FilesInteractor)
     override fun deleteTask(taskId: Int): Result<Unit>
             = modifyTask(taskId, TaskAction.DELETE)
 
+    override fun searchTaskByTitle(keyword: String): List<Task> =
+        currentList?.tasks?.filter { it.name.contains(keyword) }.orEmpty()
+
     private fun updateListFile(toDoList: ToDoList?): Result<Unit> =
         if (toDoList != null)
             filesInteractor.writeListToFile(toDoList.title.toListFileName(), toDoList)
@@ -82,9 +88,9 @@ class ToDoInteractor(private val filesInteractor: FilesInteractor)
         val result: Result<Unit>
         val action: Boolean
 
-        when(taskAction) {
-            TaskAction.DELETE -> action = tempList?.removeTask(taskId) == true
-            TaskAction.SET_AS_DONE -> action = tempList?.setTaskAsDone(taskId) == true
+        action = when(taskAction) {
+            TaskAction.DELETE -> tempList?.removeTask(taskId) == true
+            TaskAction.SET_AS_DONE -> tempList?.setTaskAsDone(taskId) == true
         }
 
         if (action) {
@@ -92,7 +98,7 @@ class ToDoInteractor(private val filesInteractor: FilesInteractor)
             if (result.isSuccessful)
                 currentList = tempList
         } else {
-            result = Result.error("Task with id $taskId does not exist")
+            result = Result.error("Task with id $taskId does not exist or already marked as completed")
         }
 
         return result

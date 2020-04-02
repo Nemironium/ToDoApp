@@ -1,7 +1,7 @@
 package utils
 
-import entities.TaskStatus
 import entities.Task
+import entities.TaskStatus
 import entities.ToDoList
 
 fun String.toListFileName() = this + "_todo-list.json"
@@ -14,6 +14,10 @@ fun ToDoList.addTask(task: Task) {
 
 fun ToDoList.setTaskAsDone(taskId: Int): Boolean {
     val temp = findTaskById(taskId)
+
+    if (temp?.status == TaskStatus.DONE.code)
+        return false
+
     temp?.status = TaskStatus.DONE.code
     return temp != null
 }
