@@ -64,13 +64,6 @@ class TasksTests {
 
         listInteractor.addTask(task1)
         assertThat(listInteractor.getTasks()?.find { it.name == task1.name }).isNotNull()
-
-        listInteractor.selectCurrentList(mockedWorkList.title)
-        assertThat(listInteractor.listName).isEqualTo(mockedWorkList.title)
-        val task2 = Task(name = "Meeting with CEO")
-
-        listInteractor.addTask(task2)
-        assertThat(listInteractor.getTasks()?.find { it.name == task2.name }).isNotNull()
     }
 
     @Test
@@ -133,5 +126,28 @@ class TasksTests {
         val result = listInteractor.deleteTask(taskId = 5)
         assertThat(result.isFailed).isTrue()
         assertThat(listInteractor.getTasks()?.size).isEqualTo(4)
+    }
+
+    @Test
+    fun checkMaxTaskId() {
+        listInteractor.selectCurrentList(mockedHomeList.title)
+        listInteractor.selectCurrentList(mockedWorkList.title)
+
+        assertThat(listInteractor.maxTaskId).isEqualTo(3)
+        val task2 = Task(name = "Meeting with CEO")
+        listInteractor.addTask(task2)
+        assertThat(listInteractor.maxTaskId).isEqualTo(4)
+    }
+
+    @Test
+    fun checkSearchTasksByTitle() {
+        /* because of modifying mockedHomeList and mockedWorkList in addTasksToExistingList */
+        listInteractor.selectCurrentList(mockedHomeList.title)
+        listInteractor.selectCurrentList(mockedWorkList.title)
+        listInteractor.selectCurrentList(mockedStudyList.title)
+
+        assertThat(listInteractor.searchTaskByTitle("Do").size).isEqualTo(2)
+        assertThat(listInteractor.searchTaskByTitle("English").size).isEqualTo(1)
+        assertThat(listInteractor.searchTaskByTitle("Mother").size).isEqualTo(0)
     }
 }

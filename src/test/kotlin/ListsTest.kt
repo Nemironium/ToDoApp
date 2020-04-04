@@ -47,6 +47,7 @@ class ListsTest {
         val result = listInteractor.createNewList(mockedEmptyHome2List.title)
         assertThat(result.isSuccessful).isTrue()
         assertThat(listInteractor.listName).isEqualTo(mockedEmptyHome2List.title)
+        assertThat(listInteractor.isTasksAvailable).isFalse()
     }
 
     @Test(expected = NullPointerException::class)
