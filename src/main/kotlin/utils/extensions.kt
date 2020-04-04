@@ -24,8 +24,8 @@ fun ToDoList.setTaskAsDone(taskId: Int): Boolean {
 
 fun ToDoList.removeTask(taskId: Int): Boolean = tasks.remove(findTaskById(taskId))
 
-fun ToDoList.todoTasks(): List<Task> {
-    return tasks.filter { it.status == TaskStatus.TODO.code }
-}
+fun ToDoList.todoTasks(): List<Task>
+        = tasks.filter { it.status == TaskStatus.TODO.code }
 
-private fun ToDoList.findTaskById(taskId: Int): Task? = tasks.find { it.id == taskId }
+private fun ToDoList.findTaskById(taskId: Int): Task?
+        = tasks.find { it.id == taskId }
