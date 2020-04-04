@@ -10,7 +10,7 @@ import entities.Task
 import entities.TaskStatus
 
 class ConsoleMenu(private val terminalColors: TermColors)
-    : ConsoleContract.ListMenu, ConsoleContract.TaskMenu {
+    : Contracts.ListMenu, Contracts.TaskMenu {
 
     private val boldStyle: AnsiCode
         get() = terminalColors.bold + terminalColors.underline
@@ -34,7 +34,7 @@ class ConsoleMenu(private val terminalColors: TermColors)
         return enterNumberPrompt(validNumbers)
     }
 
-    override fun getNewName(text: String, default: String?): String? =
+    override fun getNewName(text: String,  default: String?): String? =
         TermUi.prompt(text = "Enter $text", default = default) { return@prompt it }
 
     override fun getSelectedValueFromList(entities: List<String>, text: String): String? {

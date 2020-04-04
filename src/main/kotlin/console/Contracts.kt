@@ -2,11 +2,11 @@ package console
 
 import entities.Task
 
-interface ConsoleContract {
+interface Contracts {
     interface ListMenu {
         fun getListMenuValue(isShowSelectList: Boolean): Int?
 
-        fun getNewName(text: String, default: String?): String?
+        fun getNewName(text: String,  default: String?): String?
 
         fun getSelectedValueFromList(entities: List<String>, text: String): String?
 
@@ -25,6 +25,32 @@ interface ConsoleContract {
         fun getSelectedTaskMenuValue(): Int?
 
         fun getTaskId(maxId: Int?): Int?
+    }
+
+    interface ListConsole {
+        fun listMenu()
+
+        fun toTaskMenu(selectedList: String)
+
+        fun processListCreating()
+
+        fun processListDeleting()
+
+        fun processListSelecting()
+    }
+
+    interface TaskConsole {
+        fun taskMenu()
+
+        fun processTaskCreating()
+
+        fun processTaskDeleting()
+
+        fun processTaskCompleting()
+
+        fun processShowAllTasks()
+
+        fun processShowTodoTasks()
     }
 
 }
