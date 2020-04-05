@@ -77,7 +77,6 @@ class FilesInteractor : Contracts.FilesInteractor {
         return Result.success(parsedJson)
     }
 
-    /* TODO (не нужно перезаписывать весь файл, а лишь дописывать новые)*/
     override fun writeListToFile(fileName: String, toDoList: ToDoList): Result<Unit> {
         val outFile = File(fileName)
 

@@ -16,11 +16,10 @@ class Application : KoinComponent {
 
         if (availableLists.size == 1) {
             val result = interactor.selectCurrentList(availableLists[0])
-            if (result.isSuccessful) {
+            if (result.isSuccessful)
                 listConsole.toTaskMenu(availableLists.first())
-            } else {
+            else
                 listConsole.listMenu()
-            }
         } else {
             listConsole.listMenu()
         }
